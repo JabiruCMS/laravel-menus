@@ -5,6 +5,7 @@ namespace Nwidart\Menus;
 use Closure;
 use Countable;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Factory;
 
 class Menu implements Countable
@@ -14,7 +15,7 @@ class Menu implements Countable
      *
      * @var array
      */
-    protected $menus = array();
+    protected $menus = [];
     /**
      * @var Repository
      */
@@ -23,6 +24,9 @@ class Menu implements Countable
      * @var Factory
      */
     private $views;
+
+    /** @var array<mixed> */
+    protected $menuModels = [];
 
     /**
      * The constructor.
@@ -57,13 +61,19 @@ class Menu implements Countable
      *
      * @return \Nwidart\Menus\MenuBuilder
      */
-    public function create($name, Closure $resolver)
-    {
+    public function create(
+        $name,
+        Closure $resolver,
+        mixed $model = null,
+    ) {
         $builder = new MenuBuilder($name, $this->config);
 
         $builder->setViewFactory($this->views);
 
         $this->menus[$name] = $builder;
+        if ($model) {
+            $this->menuModels[$name] = $model;
+        }
 
         return $resolver($builder);
     }
@@ -171,5 +181,10 @@ class Menu implements Countable
     public function destroy()
     {
         $this->menus = array();
+    }
+
+    public function model(string $name): mixed
+    {
+        return $this->menuModels[$name] ?? null;
     }
 }

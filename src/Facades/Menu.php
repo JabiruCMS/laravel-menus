@@ -8,7 +8,7 @@ use Nwidart\Menus\MenuBuilder;
 
 /**
  * @method static MenuBuilder make($name, Closure $callback) Make new menu.
- * @method static MenuBuilder create($name, Closure $resolver) Create new menu.
+ * @method static MenuBuilder create($name, Closure $resolver, ?mixed $model) Create new menu.
  * @method static bool has(string $name) check if the menu exists.
  * @method static string|null instance(string $name) Get instance of the given meu if exists.
  * @method static void modify(string $name, Closure $callback) Modify a specific menu.
